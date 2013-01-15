@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://chrisrichardson.net/schema/actoids"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:spring="http://www.springframework.org/schema/beans"
+            targetNamespace="http://chrisrichardson.net/schema/actoids"
+            elementFormDefault="qualified" attributeFormDefault="unqualified"
+        >
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:element name="config">
+        <xsd:complexType>
+            <xsd:attribute name="default-executor" type="xsd:string" />
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="actor">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID" />
+            <xsd:attribute name="actor-interface" type="xsd:string" />
+            <xsd:attribute name="bean-name" type="xsd:string" />
+            <xsd:attribute name="executor" type="xsd:string" />
+            <xsd:attribute name="scope" type="xsd:string" default="singleton"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="pooled-actor">
+        <xsd:complexType>
+            <xsd:attribute name="id" type="xsd:ID" />
+            <xsd:attribute name="actor-interface" type="xsd:string" />
+            <xsd:attribute name="bean-name" type="xsd:string" />
+            <xsd:attribute name="executor" type="xsd:string" />
+        </xsd:complexType>
+    </xsd:element>
+
+
+</xsd:schema>
