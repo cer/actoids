@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Scope;
 public class SampleActoidImpl implements SampleActoid {
 
   private int counter;
-
+  
+  @Override
   public Future<String> sayHello() {
     System.out.println("In sayHello");
     try {
@@ -25,7 +26,9 @@ public class SampleActoidImpl implements SampleActoid {
     return complete("Hello " + counter++);
   }
 
+  @Override
   public void goodbye() {
     System.out.println("Bye " + counter++);
   }
+
 }

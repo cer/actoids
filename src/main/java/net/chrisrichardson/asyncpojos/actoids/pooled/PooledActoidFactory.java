@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+import net.chrisrichardson.asyncpojos.actoids.core.Actoid;
 import net.chrisrichardson.asyncpojos.actoids.core.ActoidInterceptor;
 import net.chrisrichardson.asyncpojos.actoids.core.ActoidRef;
 import net.chrisrichardson.asyncpojos.actoids.core.ActoidRequest;
@@ -50,13 +51,17 @@ public class PooledActoidFactory<T> {
   private void configuredSharedMailboxQueue(List<ActoidRef> pool) {
     BlockingQueue<ActoidRequest> sharedQueue = null;
     for (int i = 0; i < poolSize; i++) {
-      ActoidRef actoid = pool.get(i);
-      ActoidInterceptor interceptor = findInterceptor(actoid);
+      Actoid actoid = toActoid(pool.get(i));
       if (i == 0)
-        sharedQueue = interceptor.getMailboxQueue();
+        sharedQueue = actoid.getMailboxQueue();
       else
-        interceptor.setMailboxQueue(sharedQueue);
+        actoid.setMailboxQueue(sharedQueue);
     }
+  }
+
+  private Actoid toActoid(ActoidRef actoidRef) {
+    ActoidInterceptor interceptor = findInterceptor(actoidRef);
+    return interceptor.getActoid();
   }
 
   private ActoidInterceptor findInterceptor(ActoidRef actoid) {

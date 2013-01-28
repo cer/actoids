@@ -14,20 +14,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- * @author cer
- *
- */
-/**
- * @author cer
- * 
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/appctx/actoids.xml")
 public class ActoidTest {
 
   @Autowired
-  private SampleActoid sampleActor;
+  private SampleActoid sampleActoid;
 
   @Autowired
   @Qualifier("pooledWorker")
@@ -38,8 +30,8 @@ public class ActoidTest {
 
   @Test
   public void actoidShouldSayHello() throws Exception {
-    Future<String> f1 = sampleActor.sayHello();
-    Future<String> f2 = sampleActor.sayHello();
+    Future<String> f1 = sampleActoid.sayHello();
+    Future<String> f2 = sampleActoid.sayHello();
 
     long start = System.currentTimeMillis();
     String result1 = f1.get();
@@ -50,7 +42,7 @@ public class ActoidTest {
     Assert.assertEquals("Hello 0", result1);
     Assert.assertEquals("Hello 1", result2);
 
-    sampleActor.goodbye();
+    sampleActoid.goodbye();
   }
 
   @Test
@@ -94,7 +86,7 @@ public class ActoidTest {
   @Test
   public void workersShouldBeLoadBalanced() throws Exception {
     Set<Integer> instanceIds = new HashSet<Integer>();
-    for (int i = 0 ; i < 10; i++)
+    for (int i = 0; i < 10; i++)
       instanceIds.add(worker.getInstanceId().get());
     System.out.println("workerIds=" + instanceIds);
     Assert.assertEquals(10, instanceIds.size());
@@ -104,5 +96,5 @@ public class ActoidTest {
   public void workerShouldDoubleMe() throws Exception {
     Assert.assertEquals(new Integer(180), worker.doubleMe(90).get());
   }
-  
+
 }

@@ -44,7 +44,6 @@ public class ActoidRequestExecutor {
       Assert.notNull(ar.promise);
       ar.promise.supplyResult(targetMethod.invoke(actoidImplementation, params), actoidSystem.getExecutorService());
     } catch (Throwable e) {
-      e.printStackTrace();
       ar.promise.supplyThrowable(e, actoidSystem.getExecutorService());
     } finally {
       actoidContextThreadLocalHolder.pop();

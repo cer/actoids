@@ -69,10 +69,11 @@ public class ActoidSystem implements ApplicationContextAware {
 
 
   private <T> T makeActoidProxy(Object actoidImplementation, ProxyFactory pf) {
-    ActoidInterceptor handler = new ActoidInterceptor(actoidImplementation, this);
+    Actoid actoid = new Actoid(actoidImplementation, this);
+    ActoidInterceptor handler = new ActoidInterceptor(actoid);
     pf.addAdvice(handler);
     Advised proxy = (Advised) pf.getProxy();
-    handler.setSelf(proxy);
+    actoid.setSelf(proxy);
     @SuppressWarnings("unchecked")T r = (T)proxy;
     return r;
   }
