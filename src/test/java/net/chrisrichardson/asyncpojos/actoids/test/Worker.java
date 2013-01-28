@@ -2,9 +2,11 @@ package net.chrisrichardson.asyncpojos.actoids.test;
 
 import java.util.concurrent.Future;
 
+import net.chrisrichardson.asyncpojos.futures.EnhancedFuture;
+
 public interface Worker {
 
-    Future<Integer> doSomeWork();
+    EnhancedFuture<Integer> doSomeWork();
 
     Future<Integer> return99();
 

@@ -62,7 +62,7 @@ public class ActoidTest {
     // exception is ignored!
     master.prepareToWork();
     Future<Integer> result = master.computeSomething();
-    Integer i1 = result.get(200, TimeUnit.MILLISECONDS);
+    Integer i1 = result.get(2000, TimeUnit.MILLISECONDS);
     Assert.assertNotNull(i1);
   }
 

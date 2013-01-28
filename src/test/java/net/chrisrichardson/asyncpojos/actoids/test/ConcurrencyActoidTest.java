@@ -48,7 +48,7 @@ public class ConcurrencyActoidTest {
         }
         try {
           for (int i = 0; i < numberOfIterations; i++)
-            invocationCounter.addAndGet(concurrencyActoid.serialAccess().get(numberOfThreads * 2, TimeUnit.MILLISECONDS));
+            invocationCounter.addAndGet(concurrencyActoid.serialAccess().get(numberOfThreads * 3, TimeUnit.MILLISECONDS));
         } catch (Throwable t) {
           exceptions.add(t);
         }

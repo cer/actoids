@@ -1,7 +1,5 @@
 package net.chrisrichardson.asyncpojos.actoids.test;
 
-import static net.chrisrichardson.asyncpojos.futures.FutureUtils.complete;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -12,6 +10,8 @@ import net.chrisrichardson.asyncpojos.actoids.stereotypes.Actoid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+
+import com.google.common.base.Function;
 
 @Actoid
 public class MasterImpl implements Master {
@@ -28,7 +28,12 @@ public class MasterImpl implements Master {
 
   public Future<Integer> computeSomething() throws InterruptedException, ExecutionException, TimeoutException {
     Assert.notNull(worker);
-    return complete(2 * worker.doSomeWork().get(200, TimeUnit.MICROSECONDS) * 3);
+    return worker.doSomeWork().withTimeout(TimeUnit.MILLISECONDS, 10).map(new Function<Integer, Integer>() {
+
+      @Override
+      public Integer apply(Integer input) {
+        return 2 + input;
+      }});
   }
 
   public Future<Integer> computeSomethingElse() {

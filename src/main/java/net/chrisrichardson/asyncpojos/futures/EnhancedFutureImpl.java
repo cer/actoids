@@ -13,6 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.core.task.TaskExecutor;
 
+import com.google.common.base.Function;
+
 /**
  * A fairly lame Future implementation
  */
@@ -26,9 +28,10 @@ public class EnhancedFutureImpl<T> implements EnhancedFuture<T>, Promise {
 
   @Override
   public void supplyResult(Object result, final TaskExecutor executionService) {
+    final Object self = this;
     if (result instanceof Future) {
       if (!(result instanceof EnhancedFutureImpl))
-        throw new RuntimeException("not MyFuture: " + result);
+        throw new RuntimeException("not EnhancedFutureImpl: " + result);
       EnhancedFutureImpl<Object> otherFuture = (EnhancedFutureImpl<Object>) result;
       otherFuture.addCompletionCallback(new CompletionCallback<Object>() {
 
@@ -42,9 +45,13 @@ public class EnhancedFutureImpl<T> implements EnhancedFuture<T>, Promise {
       });
     } else {
       @SuppressWarnings("unchecked")
-      Outcome<T> o = (Outcome<T>) Outcome.makeSuccessfullOutcome(result);
+      Outcome<T> o = (Outcome<T>) Outcome.makeSuccessfullOutcome(transformResult(result));
       setOutcomeAndNotify(o, executionService);
     }
+  }
+
+  protected Object transformResult(Object result) {
+    return result;
   }
 
   @Override
@@ -69,7 +76,7 @@ public class EnhancedFutureImpl<T> implements EnhancedFuture<T>, Promise {
     lock.lock();
     try {
       if (!outcomeHolder.compareAndSet(null, o)) {
-        throw new RuntimeException("Already supplied");
+        throw new RuntimeException("Already supplied: " + this + ", existingOutcome=" + outcomeHolder.get() + ", otherOutcome=" + o);
       }
       outcomeAvailable.signalAll();
       callbacksToInvoke.addAll(completionCallbacks);
@@ -77,13 +84,16 @@ public class EnhancedFutureImpl<T> implements EnhancedFuture<T>, Promise {
       lock.unlock();
     }
     for (@SuppressWarnings("rawtypes") final CompletionCallback<T> callback : callbacksToInvoke) {
-      executionService.execute(new Runnable() {
-
-        @Override
-        public void run() {
-          callback.onCompletion(o);
-        }
-      });
+      if (executionService == null)
+        callback.onCompletion(o);
+      else
+        executionService.execute(new Runnable() {
+  
+          @Override
+          public void run() {
+            callback.onCompletion(o);
+          }
+        });
     }
   }
 
@@ -159,8 +169,39 @@ public class EnhancedFutureImpl<T> implements EnhancedFuture<T>, Promise {
 
       @Override
       public void onCompletion(Outcome<T> outcome) {
-        if (outcome.isSuccessful())
+        if (!outcome.isSuccessful())
           failureCallback.onFailure(outcome.failure);
+      }
+    });
+  }
+
+  @Override
+  public EnhancedFuture<T> withTimeout(TimeUnit timeUnit, int amount) {
+    // FIXME - make me do something
+    return this;
+  }
+
+  @Override
+  public <ResultType> EnhancedFuture<ResultType> map(Function<T, ResultType> function) {
+    MappedEnhancedFuture<ResultType, T> result = new MappedEnhancedFuture<ResultType, T>(function);
+    pipeTo(result);
+    return result;
+  }
+
+  private void pipeTo(final Promise result) {
+    final TaskExecutor executionService = null;
+    this.addSuccessCallback(new SuccessCallback<T>() {
+
+      @Override
+      public void onSuccess(T value) {
+        result.supplyResult(value, executionService);
+      }
+    });
+    this.addFailureCallback(new FailureCallback() {
+      
+      @Override
+      public void onFailure(Throwable t) {
+        result.supplyThrowable(t, executionService);
       }
     });
   }

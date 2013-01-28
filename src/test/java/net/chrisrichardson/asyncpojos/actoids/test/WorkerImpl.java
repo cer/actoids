@@ -5,6 +5,7 @@ import static net.chrisrichardson.asyncpojos.futures.FutureUtils.complete;
 import java.util.concurrent.Future;
 
 import net.chrisrichardson.asyncpojos.actoids.stereotypes.Actoid;
+import net.chrisrichardson.asyncpojos.futures.EnhancedFuture;
 
 import org.springframework.context.annotation.Scope;
 
@@ -26,7 +27,7 @@ public class WorkerImpl implements Worker {
     }
     
     @Override
-    public Future<Integer> doSomeWork() {
+    public EnhancedFuture<Integer> doSomeWork() {
         System.out.println("Worker - " + instanceId + " is working: " + counter);
         return complete(counter++);
     }
