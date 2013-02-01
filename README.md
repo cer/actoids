@@ -103,3 +103,24 @@ Actoids provides an enhanced Future implementation that's inspired by Scala Futu
 	  void addFailureCallback(FailureCallback failureCallback);
 
 	}
+
+Using Actoids
+-------------
+
+Add the following to your maven pom.xml:
+
+	<repositories>
+		<repository>
+			<id>actoid-release</id>
+			<url>http://repository.actoids.org/release</url>
+		</repository>
+	</repositories>
+
+    <dependencies>
+		<dependency>
+			<groupId>net.chrisrichardson.async</groupId>
+			<artifactId>actoids</artifactId>
+			<version>0.1</version>
+		</dependency>
+    </dependencies>
+
