@@ -14,7 +14,7 @@
 	</properties>
 
 	<scm>
-		<developerConnection>scm:git://github.com:cer/actoids.git</developerConnection>		
+		<developerConnection>scm:git:git@github.com:cer/actoids.git</developerConnection>		
 	</scm>
 
 	<dependencies>
