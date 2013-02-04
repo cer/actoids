@@ -23,8 +23,7 @@ public class Outcome<T> {
     return o;
   }
 
-  static <T> Outcome<T> makeSuccessfullOutcome(T result) {
-    Assert.notNull(result);
+  static <T> Outcome<T> makeSuccessfulOutcome(T result) {
     Outcome<T> o = new Outcome<T>();
     o.success = result;
     return o;

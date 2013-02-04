@@ -34,4 +34,13 @@ public class EnhancedFutureImplTest {
     Assert.assertEquals(new Integer(3), f1.get(5, TimeUnit.MILLISECONDS));
   }
 
+  @Test
+  public void futureShouldAllowNullResult() throws Exception {
+    EnhancedFutureImpl<Integer> f1 = new EnhancedFutureImpl<Integer>();
+    f1.supplyResult(null, taskExecutor);
+
+    Assert.assertNull(f1.get(5, TimeUnit.MILLISECONDS));
+
+  }
+
 }

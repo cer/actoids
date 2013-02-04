@@ -45,7 +45,7 @@ public class EnhancedFutureImpl<T> implements EnhancedFuture<T>, Promise {
       });
     } else {
       @SuppressWarnings("unchecked")
-      Outcome<T> o = (Outcome<T>) Outcome.makeSuccessfullOutcome(transformResult(result));
+      Outcome<T> o = (Outcome<T>) Outcome.makeSuccessfulOutcome(transformResult(result));
       setOutcomeAndNotify(o, executionService);
     }
   }
