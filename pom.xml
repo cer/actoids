@@ -3,7 +3,7 @@
 
 	<groupId>net.chrisrichardson.async</groupId>
 	<artifactId>actoids</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 	<packaging>jar</packaging>
 	<name>actoids</name>
 	<url>https://github.com/cer/actoids</url>
